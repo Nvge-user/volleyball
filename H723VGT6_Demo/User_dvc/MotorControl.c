@@ -12,7 +12,7 @@ MOTOR_send cmd_1 = {
     cmd_1.K_W  = 0.04f
 };
 MOTOR_send cmd_2 = {
-    cmd_2.id   = 3,
+    cmd_2.id   = 1,
     cmd_2.mode = 1,
     cmd_2.T    = 0.0f,
     cmd_2.W    = 0.0f,
@@ -21,7 +21,7 @@ MOTOR_send cmd_2 = {
     cmd_2.K_W  = 0.04f
 };
 MOTOR_send cmd_3 = {
-    cmd_3.id   = 4,
+    cmd_3.id   = 2,
     cmd_3.mode = 1,
     cmd_3.T    = 0.0f,
     cmd_3.W    = 0.0f,
@@ -38,11 +38,31 @@ static uint32_t last_check_time = 0;
 static uint8_t  motor_state = 0;
 static int32_t state_start_time = 0;
 static uint8_t  last_pin_state = 0xFF;
+uint8_t count = 0;
 
 void MotorControl_Init(void)
 {
-    last_pin_state = HAL_GPIO_ReadPin(E18_PORT, E18_PIN);
-    motor_state = 0;
+	last_pin_state = HAL_GPIO_ReadPin(E18_PORT, E18_PIN);
+	motor_state = 0;
+	
+//	cmd_1.T    = 0.0f;
+//	cmd_1.W    = 0.0f;
+//	cmd_1.Pos  = 4.31f;
+//	cmd_1.K_P  = 0.6f;
+//	cmd_1.K_W  = 0.04f;
+//	
+//	cmd_2.T    = 0.0f;
+//	cmd_2.W    = 0.0f;
+//	cmd_2.Pos  = 4.31f;
+//	cmd_2.K_P  = 0.6f;
+//	cmd_2.K_W  = 0.04f;
+//	
+//	cmd_3.T    = 0.0f;
+//	cmd_3.W    = 0.0f;
+//	cmd_3.Pos  = 4.31f;
+//	cmd_3.K_P  = 0.6f;
+//	cmd_3.K_W  = 0.04f;
+
 }
 
 void MotorControl_Update(void)
@@ -95,7 +115,7 @@ void MotorControl_Update(void)
             cmd_1.K_P = 0.3f;
             cmd_2.K_P = 0.3f;
             cmd_3.K_P = 0.3f;
-            if (HAL_GetTick() - state_start_time >= MOVE_TIME_MS)
+            if (state_start_time == -1)
             {
                 motor_state = 0;
             }
@@ -105,11 +125,9 @@ void MotorControl_Update(void)
             motor_state = 0;
             break;
     }
+		SERVO_Send_recv_Motor1(&cmd_1, &data_1);
 
-    SERVO_Send_recv_Motor2(&cmd_1, &data_1);
-	
-//    SERVO_Send_recv_Motor1(&cmd_2, &data_2);
-//    
-//    SERVO_Send_recv_Motor1(&cmd_3, &data_3);
+    SERVO_Send_recv_Motor1(&cmd_2, &data_2);
     
+		SERVO_Send_recv_Motor1(&cmd_3, &data_3);
 }

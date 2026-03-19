@@ -251,7 +251,7 @@ void Orin_UART10_Callback(uint8_t *Buffer, uint16_t Length)    //测试串口有
  */
 void Task10ms_TIM4_Callback()
 {
-	MotorControl_Update();
+//	MotorControl_Update();
 }
 
 /**
@@ -291,6 +291,9 @@ void Task1ms_TIM5_Callback()
     serialplot.TIM_Write_PeriodElapsedCallback();
     
     TIM_1ms_UART_PeriodElapsedCallback();
+		
+		MotorControl_Update();
+		
 }
 /**
  * @brief 初始化任务
@@ -316,8 +319,8 @@ void Task_Init()
     UART_Init(&huart7, Serialplot_UART7_Callback, SERIALPLOT_RX_VARIABLE_ASSIGNMENT_MAX_LENGTH);
 		
     serialplot.Init(&huart7, 8, (char **)Variable_Assignment_List);
-	
-	MotorControl_Init();
+
+		MotorControl_Init();
     // 设备层初始化
     
     // 战车层初始化

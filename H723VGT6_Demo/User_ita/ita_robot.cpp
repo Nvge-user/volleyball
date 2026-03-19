@@ -110,18 +110,18 @@ void Class_Chariot::_Chassis_Control()
     float chassis_velocity_x = 0, chassis_velocity_y = 0;
     static float chassis_omega = 0;   
     static float chassis_angle = 0;  
-	uint8_t a = 0;
 
 	/************************************遥控器控制逻辑*********************************************/
     
     if (Active_Controller == Controller_DR16 && DR16_Control_Type == DR16_Control_Type_REMOTE)
     {
-        float dr16_l_x, dr16_l_y, dr16_yaw, dr16_r_x, dr16_r_y;    
+        float dr16_l_x, dr16_l_y, dr16_yaw, dr16_r_x, dr16_r_y;
         //排除遥控器死区
         dr16_l_x = (Math_Abs(DR16.Get_Left_X()) > Dead_Zone) ? DR16.Get_Left_X() : 0;
         dr16_l_y = (Math_Abs(DR16.Get_Left_Y()) > Dead_Zone) ? DR16.Get_Left_Y() : 0;
-		dr16_r_x = (Math_Abs(DR16.Get_Right_X()) > Dead_Zone) ? DR16.Get_Right_X() : 0;
-        dr16_r_y = (Math_Abs(DR16.Get_Right_Y()) > Dead_Zone) ? DR16.Get_Right_Y() : 0;
+				dr16_r_x = (Math_Abs(DR16.Get_Right_X()) > Dead_Zone) ? DR16.Get_Right_X() : 0;
+//        dr16_r_y = (Math_Abs(DR16.Get_Right_Y()) > Dead_Zone) ? DR16.Get_Right_Y() : 0;
+
         //yaw和xy的死区是否相同存疑
         dr16_yaw = (Math_Abs(DR16.Get_Yaw()) > Dead_Zone) ? DR16.Get_Yaw() : 0;
         //设定矩形到圆形映射进行控制
@@ -136,14 +136,7 @@ void Class_Chariot::_Chassis_Control()
         }
         else if (DR16.Get_Right_Switch()==DR16_Switch_Status_DOWN)  //右下 小陀螺模式
         {
-            if(dr16_r_y>0.5)
-			{
-				HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_SET);
-			}
-			else
-			{
-				HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_RESET);
-			}
+						HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_SET);
         }
         else if (DR16.Get_Right_Switch()==DR16_Switch_Status_MIDDLE)
         {
@@ -152,20 +145,10 @@ void Class_Chariot::_Chassis_Control()
             Chassis.Set_Target_Velocity_X(chassis_velocity_x);
             Chassis.Set_Target_Velocity_Y(chassis_velocity_y);
             Chassis.Set_Target_Omega(chassis_omega); 
+					
+						HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_RESET);
         }
     }
-	
-	if(a == 0)
-	{
-		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_RESET);
-	}
-	if(a == 1)
-	{
-		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_0, GPIO_PIN_SET);
-	}
-	
-    
-    
 }
 void Class_Chariot::TIM_Control_Callback()
 {

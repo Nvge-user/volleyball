@@ -118,39 +118,39 @@ HAL_StatusTypeDef SERVO_Send_recv_Motor1(MOTOR_send *pData, MOTOR_recv *rData)
     
     return HAL_ERROR;
 }
-HAL_StatusTypeDef SERVO_Send_recv_Motor2(MOTOR_send *pData, MOTOR_recv *rData)
-{
-    uint16_t rxlen = 0;
+//HAL_StatusTypeDef SERVO_Send_recv_Motor2(MOTOR_send *pData, MOTOR_recv *rData)
+//{
+//    uint16_t rxlen = 0;
 
-    modify_data(pData);
-    
-		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, GPIO_PIN_SET);
-		
-    HAL_UART_Transmit(&huart3, (uint8_t *)pData, sizeof(pData->motor_send_data), 10); 
-		
+//    modify_data(pData);
+//    
+//		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, GPIO_PIN_SET);
+//		
+//    HAL_UART_Transmit(&huart3, (uint8_t *)pData, sizeof(pData->motor_send_data), 10); 
+//		
 
-		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, GPIO_PIN_RESET);
-		
-    HAL_UARTEx_ReceiveToIdle(&huart3, (uint8_t *)rData, sizeof(rData->motor_recv_data), &rxlen, 10);
-		
+//		HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, GPIO_PIN_RESET);
+//		
+//    HAL_UARTEx_ReceiveToIdle(&huart3, (uint8_t *)rData, sizeof(rData->motor_recv_data), &rxlen, 10);
+//		
 
-    if(rxlen == 0)
+//    if(rxlen == 0)
 
-      return HAL_TIMEOUT;
+//      return HAL_TIMEOUT;
 
-    if(rxlen != sizeof(rData->motor_recv_data))
-			return HAL_ERROR;
+//    if(rxlen != sizeof(rData->motor_recv_data))
+//			return HAL_ERROR;
 
-    uint8_t *rp = (uint8_t *)&rData->motor_recv_data;
-    if(rp[0] == 0xFE && rp[1] == 0xEE)
-    {
-        rData->correct = 1;
-        extract_data(rData);
-        return HAL_OK;
-    }
-    
-    return HAL_ERROR;
-}
+//    uint8_t *rp = (uint8_t *)&rData->motor_recv_data;
+//    if(rp[0] == 0xFE && rp[1] == 0xEE)
+//    {
+//        rData->correct = 1;
+//        extract_data(rData);
+//        return HAL_OK;
+//    }
+//    
+//    return HAL_ERROR;
+//}
 //HAL_StatusTypeDef SERVO_Send_recv_Motor3(MOTOR_send *pData, MOTOR_recv *rData)
 //{
 //    uint16_t rxlen = 0;
